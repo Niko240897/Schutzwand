@@ -436,6 +436,7 @@ class KippungApp:
             sf = F_crit / F_applied if F_applied > 0 else float("inf")
         else:
             sf = None
+        A_wall = H * B
 
         if F_applied is None:
             status = "Kein Vergleich moeglich, da keine Kraft angegeben wurde."
@@ -448,13 +449,22 @@ class KippungApp:
         if F_applied is None:
             text += (
                 "F_applied = - (nicht angegeben)\n"
-                "Sicherheitsfaktor SF = -\n\n"
+                "Sicherheitsfaktor SF = -\n"
             )
         else:
             text += (
                 f"F_applied = {F_applied:.3f} N ({method_name})\n"
-                f"Sicherheitsfaktor SF = {sf:.3f}\n\n"
+                f"Sicherheitsfaktor SF = {sf:.3f}\n"
             )
+
+        if A_wall > 0:
+            text += (
+                f"A_wall = H * B = {A_wall:.3f} m^2\n"
+                f"F_crit/A_wall = {(F_crit / A_wall):.3f} N/m^2\n"
+            )
+            if F_applied is not None:
+                text += f"F_applied/A_wall = {(F_applied / A_wall):.3f} N/m^2\n"
+            text += "\n"
 
         if info_note:
             text += f"Hinweis: {info_note}\n\n"
